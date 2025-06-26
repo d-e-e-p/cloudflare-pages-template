@@ -14,12 +14,14 @@
 
     .section {
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transform: translateY(30px); /* Start slightly below and hidden */
+      transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out; /* Animate both opacity and transform */
       margin-bottom: 3rem;
     }
 
     .section.visible {
       opacity: 1;
+      transform: translateY(0); /* Slide to original position and become visible */
     }
 
     .scramble {
