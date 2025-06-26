@@ -46,9 +46,27 @@
     th {
       background-color: #030; /* Darker green for header */
     }
+
+    .distraction-icon {
+      position: fixed;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      width: 50px; /* Adjust size as needed */
+      height: 50px; /* Adjust size as needed */
+      z-index: 1000; /* Ensure they are on top */
+      pointer-events: none; /* So they don't interfere with clicks */
+    }
+
+    .distraction-icon.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
+
+  <img src="img/instagram.png" alt="Instagram distraction icon" class="distraction-icon" id="distractionInstagram">
+  <img src="img/reddit.png" alt="Reddit distraction icon" class="distraction-icon" id="distractionReddit">
+  <img src="img/youtube.png" alt="YouTube distraction icon" class="distraction-icon" id="distractionYoutube">
 
   <div class="scramble" id="scrambleTitle"></div>
 
@@ -171,6 +189,13 @@ This method draws on research supporting structured support for executive functi
     const titleTarget = "RECLAIM ATTENTION";
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
     const titleEl = document.getElementById("scrambleTitle");
+    const distractionIconElements = [
+      document.getElementById("distractionInstagram"),
+      document.getElementById("distractionReddit"),
+      document.getElementById("distractionYoutube")
+    ];
+    const iconSize = 50; // Must match CSS width/height for accurate positioning
+
     const sections = [
       document.getElementById("section1"),
       document.getElementById("section2"),
@@ -195,7 +220,36 @@ This method draws on research supporting structured support for executive functi
         setTimeout(revealScrambledTitle, 80);
       } else {
         revealSectionsSequentially();
+        // Start the distraction icons after a brief delay once title is done
+        setTimeout(startDistractionInterval, 1000);
       }
+    };
+
+    const showRandomDistraction = () => {
+      const icon = distractionIconElements[Math.floor(Math.random() * distractionIconElements.length)];
+      
+      if (!icon) return;
+
+      // Calculate random position, ensuring the icon is fully visible
+      const x = Math.random() * (window.innerWidth - iconSize);
+      const y = Math.random() * (window.innerHeight - iconSize);
+      
+      icon.style.left = `${x}px`;
+      icon.style.top = `${y}px`;
+      
+      icon.classList.add("show");
+      
+      // Hide the icon after a random duration
+      setTimeout(() => {
+        icon.classList.remove("show");
+      }, 1500 + Math.random() * 2000); // Visible for 1.5 to 3.5 seconds
+    };
+
+    const startDistractionInterval = () => {
+      showRandomDistraction();
+      // Schedule the next icon appearance with a random interval
+      const nextInterval = 2000 + Math.random() * 3000; // Next icon in 2 to 5 seconds
+      setTimeout(startDistractionInterval, nextInterval);
     };
 
     const revealSectionsSequentially = (i = 0) => {
