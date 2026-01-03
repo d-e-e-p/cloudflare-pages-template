@@ -228,7 +228,7 @@ We find that it takes time for the routine to stick and show value, so it helps 
     <h2>Methodology: Daily Routines</h2>
     <p>
     Our core strategy is a daily check-in and study routine that encourages the student to detox from distractions.  
-    A typical session is in person with 2-3 students and 1 teacher:
+    A typical session is in person with 2-3 students and 1 facilitator.  Sessions are structured as follows:
     <ul>
         <li>
             Start by review of status and progress. Agreement on specific, achievable objectives for the session.
@@ -524,8 +524,8 @@ Most importantly, you can only be 50%+-focused on one thing at a time—or zero,
         // Set initial position and velocity
         x = Math.random() * (window.innerWidth - iconSize);
         y = Math.random() * (window.innerHeight - iconSize);
-        dx = (Math.random() - 0.5) * 4; // Random velocity between -2 and 2
-        dy = (Math.random() - 0.5) * 4; // Random velocity between -2 and 2
+        dx = (Math.random() - 0.5) * 2; // Random velocity between -1 and 1
+        dy = (Math.random() - 0.5) * 2; // Random velocity between -1 and 1
         
         // Ensure it's not too slow
         if (Math.abs(dx) < 1) dx = dx > 0 ? 1 : -1;
@@ -533,13 +533,13 @@ Most importantly, you can only be 50%+-focused on one thing at a time—or zero,
 
         switchIcon(); // Get the first icon
         animate(); // Start the animation loop
-        setInterval(switchIcon, 7000); // Switch icon every 7 seconds
+        setInterval(switchIcon, 10000); // Switch icon every 10 seconds
     };
 
     const revealSectionsSequentially = (i = 0) => {
       if (i < sections.length) {
         sections[i].classList.add("visible");
-        setTimeout(() => revealSectionsSequentially(i + 1), 3000);
+        setTimeout(() => revealSectionsSequentially(i + 1), 7000);
       }
     };
 
