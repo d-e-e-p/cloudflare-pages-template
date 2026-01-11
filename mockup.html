@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reclaim Attention - App Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #e8e6e1;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .phone-mockup {
+            width: 375px;
+            height: 812px;
+            background: #f5f4f0;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+            border: 12px solid #2c3e50;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background: #f5f4f0;
+            position: relative;
+        }
+
+        .header {
+            background: #3a5a6a;
+            color: #f5f4f0;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .app-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .group-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .main-goal-card {
+            background: white;
+            border-left: 4px solid #4a7c59;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .goal-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a7c59;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .goal-input {
+            font-size: 18px;
+            color: #2c3e50;
+            line-height: 1.4;
+            border: none;
+            outline: none;
+            width: 100%;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .goal-text {
+            font-size: 18px;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 20px;
+            background: #4a7c59;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #5a6c7d;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .generating-text {
+            font-size: 14px;
+            color: #7a8c9e;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .task-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .task-item.show {
+            animation: slideIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            background: #f0f4f1;
+        }
+
+        .task-item.active {
+            border: 2px solid #4a7c59;
+            box-shadow: 0 2px 8px rgba(74,124,89,0.2);
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #5a6c7d;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox:hover {
+            border-color: #4a7c59;
+        }
+
+        .checkbox.checked {
+            background: #4a7c59;
+            border-color: #4a7c59;
+        }
+
+        .checkmark {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-text {
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+        }
+
+        .task-time {
+            color: #7a8c9e;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .timer {
+            color: #4a7c59;
+            font-size: 13px;
+            font-weight: 600;
+            background: #e8f5e9;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .peer-footer {
+            background: white;
+            padding: 16px 20px;
+            border-top: 1px solid #e0ddd8;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .peer-label {
+            font-size: 12px;
+            color: #7a8c9e;
+            margin-bottom: 8px;
+        }
+
+        .peer-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .peer-badge {
+            font-size: 13px;
+            color: #2c3e50;
+            background: #e8f5e9;
+            padding: 6px 12px;
+            border-radius: 16px;
+        }
+
+        .session-header {
+            background: #4a7c59;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .elapsed-time {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .session-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .progress-section {
+            background: white;
+            padding: 20px;
+            margin: -10px 20px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .progress-label {
+            font-size: 13px;
+            color: #5a6c7d;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e0ddd8;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a7c59, #5c9c70);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #4a7c59;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .peer-dashboard {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .peer-item {
+            margin-bottom: 16px;
+        }
+
+        .peer-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .peer-name {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .peer-status {
+            font-size: 12px;
+            color: #7a8c9e;
+        }
+
+        .peer-status.warning {
+            color: #d4a017;
+        }
+
+        .peer-progress-bar {
+            height: 8px;
+            background: #e0ddd8;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .peer-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .peer-progress-fill.you {
+            background: #4a7c59;
+        }
+
+        .peer-progress-fill.sarah {
+            background: #3a5a6a;
+        }
+
+        .peer-progress-fill.ahmed {
+            background: #d4a017;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44,62,80,0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            background: rgba(44,62,80,0.75);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 340px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .ai-observation {
+            background: #f0f4f8;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 3px solid #3a5a6a;
+        }
+
+        .observation-text {
+            font-size: 14px;
+            color: #5a6c7d;
+            line-height: 1.5;
+        }
+
+        .radio-group {
+            margin: 16px 0;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 2px solid #d0d7de;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .radio-option:hover {
+            border-color: #4a7c59;
+            background: #f9fafb;
+        }
+
+        .radio-option.selected {
+            border-color: #4a7c59;
+            background: #f0f8f4;
+        }
+
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #5a6c7d;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .radio-circle.selected {
+            border-color: #4a7c59;
+        }
+
+        .radio-inner {
+            width: 10px;
+            height: 10px;
+            background: #4a7c59;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        .radio-circle.selected .radio-inner {
+            transform: scale(1);
+        }
+
+        .radio-label {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .reflective-prompt {
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #fff9e6;
+            border-radius: 8px;
+            border-left: 3px solid #4a7c59;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .reflective-prompt.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-actions.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn {
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: #4a7c59;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #5a6c7d;
+            border: 2px solid #d0d7de;
+        }
+
+        .label-tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 6px;
+            background: #e0ddd8;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-mockup">
+        <div class="screen" id="mainScreen">
+            <!-- Screen 1: Initial Goal Input -->
+            <div id="screen1" class="screen-state">
+                <div class="header">
+                    <div class="app-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Reclaim Attention
+                    </div>
+                    <div class="group-indicator">
+                        <div class="status-dot"></div>
+                        <span>Group Active</span>
+                    </div>
+                </div>
+                
+                <div class="content">
+                    <div class="main-goal-card">
+                        <div class="goal-label">Today's Goal</div>
+                        <div class="goal-text" id="typingGoal"></div>
+                    </div>
+
+                    <div id="chunksSection" class="hidden">
+                        <div class="section-title">Structured Chunks</div>
+                        <div id="generatingMsg" class="generating-text">Analyzing your goal and creating structured chunks...</div>
+                        
+                        <div class="task-item" id="task1">
+                            <div class="checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-text">Review notes and primary sources on pre-1789 France (Estates-General, taxation, bread prices)</div>
+                                <div class="task-time">approx 15m</div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" id="task2">
+                            <div class="checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-text">Draft a thesis stating the most significant cause (e.g., fiscal crisis vs. Enlightenment ideas)</div>
+                                <div class="task-time">approx 15m</div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" id="task3">
+                            <div class="checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-text">Outline how the introduction will preview social, economic, and political factors</div>
+                                <div class="task-time">approx 15m</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="peer-footer">
+                    <div class="peer-label">Studying with:</div>
+                    <div class="peer-list">
+                        <span class="peer-badge">Sarah (Online)</span>
+                        <span class="peer-badge">Ahmed (Online)</span>
+                        <span class="peer-badge">Facilitator Jen (Idle)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Task 1 Progress -->
+            <div id="screen2" class="screen-state hidden">
+                <div class="session-header">
+                    <div class="session-label">Focus Session Active</div>
+                    <div class="elapsed-time" id="timerDisplay">00:00:00</div>
+                </div>
+                
+                <div class="content">
+                    <div class="progress-section">
+                        <div class="progress-label">Task 1 Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="task1Progress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text" id="task1ProgressText">0% Complete</div>
+                    </div>
+
+                    <div class="section-title">Your Tasks</div>
+                    
+                    <div class="task-item active show" id="task1Active">
+                        <div class="checkbox" id="task1Checkbox"></div>
+                        <div class="task-content">
+                            <div class="task-text">Review notes and primary sources on pre-1789 France (Estates-General, taxation, bread prices)</div>
+                            <div class="task-time">approx 15m</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item show" style="animation-delay: 0.1s">
+                        <div class="checkbox"></div>
+                        <div class="task-content">
+                            <div class="task-text">Draft a thesis stating the most significant cause (e.g., fiscal crisis vs. Enlightenment ideas)</div>
+                            <div class="task-time">approx 15m</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item show" style="animation-delay: 0.2s">
+                        <div class="checkbox"></div>
+                        <div class="task-content">
+                            <div class="task-text">Outline how the introduction will preview social, economic, and political factors</div>
+                            <div class="task-time">approx 15m</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for Reflection -->
+            <div class="modal-overlay" id="modalOverlay">
+                <div class="modal">
+                    <div class="modal-title">Step Complete: Reflecting on Progress</div>
+                    
+                    <div class="ai-observation">
+                        <div class="observation-text">
+                            Quick comprehension check: By 1789, what percentage of a French worker's budget was spent on bread?
+                        </div>
+                    </div>
+
+                    <div class="radio-group">
+                        <div class="radio-option" data-answer="30">
+                            <div class="radio-circle">
+                                <div class="radio-inner"></div>
+                            </div>
+                            <div class="radio-label">About 30%</div>
+                        </div>
+                        
+                        <div class="radio-option" data-answer="50">
+                            <div class="radio-circle">
+                                <div class="radio-inner"></div>
+                            </div>
+                            <div class="radio-label">About 50%</div>
+                        </div>
+                        
+                        <div class="radio-option" data-answer="90">
+                            <div class="radio-circle">
+                                <div class="radio-inner"></div>
+                            </div>
+                            <div class="radio-label">About 90%</div>
+                        </div>
+                    </div>
+
+                    <div class="reflective-prompt" id="feedbackBox">
+                        ✓ Correct! This economic pressure was a key factor in revolutionary unrest.
+                    </div>
+
+                    <div class="modal-actions" id="modalActions">
+                        <button class="btn btn-primary" id="continueBtn">Continue to Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3: Final Progress Screen -->
+            <div id="screen3" class="screen-state hidden">
+                <div class="session-header">
+                    <div class="session-label">Focus Session Active</div>
+                    <div class="elapsed-time">00:20:15</div>
+                </div>
+                
+                <div class="content">
+                    <div class="progress-section">
+                        <div class="progress-label">Task 2 Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                        <div class="progress-text">65% Complete</div>
+                    </div>
+
+                    <div class="section-title">Your Tasks</div>
+                    
+                    <div class="task-item completed show">
+                        <div class="checkbox checked">
+                            <span class="checkmark">✓</span>
+                        </div>
+                        <div class="task-content">
+                            <div class="task-text completed">Review notes and primary sources on pre-1789 France (Estates-General, taxation, bread prices)</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item active show" style="animation-delay: 0.1s">
+                        <div class="checkbox"></div>
+                        <div class="task-content">
+                            <div class="task-text">Draft a thesis stating the most significant cause (e.g., fiscal crisis vs. Enlightenment ideas)</div>
+                            <div class="task-time">approx 15m</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item show" style="animation-delay: 0.2s">
+                        <div class="checkbox"></div>
+                        <div class="task-content">
+                            <div class="task-text">Outline how the introduction will preview social, economic, and political factors</div>
+                        </div>
+                    </div>
+
+                    <div class="peer-dashboard">
+                        <div class="section-title">Group Progress</div>
+                        
+                        <div class="peer-item">
+                            <div class="peer-name">
+                                <span>You</span>
+                                <span class="peer-status">Working on Task 2</span>
+                            </div>
+                            <div class="peer-progress-bar">
+                                <div class="peer-progress-fill you" style="width: 35%"></div>
+                            </div>
+                        </div>
+
+                        <div class="peer-item">
+                            <div class="peer-name">
+                                <span>Sarah</span>
+                                <span class="peer-status">Working on Task 3</span>
+                            </div>
+                            <div class="peer-progress-bar">
+                                <div class="peer-progress-fill sarah" style="width: 50%"></div>
+                            </div>
+                        </div>
+
+                        <div class="peer-item">
+                            <div class="peer-name">
+                                <span>Ahmed</span>
+                                <span class="peer-status warning">Stuck on Task 1</span>
+                            </div>
+                            <div class="peer-progress-bar">
+                                <div class="peer-progress-fill ahmed" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const goalText = "Draft Introduction on the Causes of the French Revolution";
+        let charIndex = 0;
+        
+        // Step 1: Type goal text
+        function typeGoal() {
+            const element = document.getElementById('typingGoal');
+            if (charIndex < goalText.length) {
+                element.textContent = goalText.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeGoal, 50);
+            } else {
+                setTimeout(showChunks, 800);
+            }
+        }
+
+        // Step 2: Show chunks being generated
+        function showChunks() {
+            document.getElementById('chunksSection').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('generatingMsg').style.display = 'none';
+                document.getElementById('task1').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('task2').classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('task3').classList.add('show');
+                        setTimeout(startSession, 1500);
+                    }, 200);
+                }, 200);
+            }, 2000);
+        }
+
+        // Step 3: Transition to session screen
+        function startSession() {
+            document.getElementById('screen1').classList.add('hidden');
+            document.getElementById('screen2').classList.remove('hidden');
+            animateTimer();
+            animateProgress();
+        }
+
+        let seconds = 0;
+        let timerInterval;
+        
+        function animateTimer() {
+            timerInterval = setInterval(() => {
+                seconds += 3; // Increment by 3 seconds each update
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                const hrs = Math.floor(mins / 60);
+                const displayMins = mins % 60;
+                document.getElementById('timerDisplay').textContent = 
+                    `${String(hrs).padStart(2, '0')}:${String(displayMins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                
+                // Stop at around 15:42
+                if (seconds >= 942) {
+                    clearInterval(timerInterval);
+                }
+            }, 100);
+        }
+
+        // Step 4: Animate progress from 0% to 80%
+        let progress = 0;
+        function animateProgress() {
+            const progressInterval = setInterval(() => {
+                progress += 1;
+                document.getElementById('task1Progress').style.width = progress + '%';
+                document.getElementById('task1ProgressText').textContent = progress + '% Complete';
+                
+                if (progress >= 80) {
+                    clearInterval(progressInterval);
+                    setTimeout(completeTask1, 500);
+                }
+            }, 50);
+        }
+
+        // Step 5: Auto-complete task 1 and show modal
+        function completeTask1() {
+            document.getElementById('task1Checkbox').classList.add('checked');
+            document.getElementById('task1Checkbox').innerHTML = '<span class="checkmark">✓</span>';
+            document.getElementById('task1Active').classList.add('completed');
+            document.getElementById('task1Active').querySelector('.task-text').classList.add('completed');
+            
+            setTimeout(() => {
+                document.getElementById('modalOverlay').classList.add('show');
+                setTimeout(selectCorrectAnswer, 1500);
+            }, 300);
+        }
+
+        // Step 6: Auto-select correct answer
+        function selectCorrectAnswer() {
+            const options = document.querySelectorAll('.radio-option');
+            const correctOption = document.querySelector('.radio-option[data-answer="90"]');
+            
+            correctOption.classList.add('selected');
+            correctOption.querySelector('.radio-circle').classList.add('selected');
+            
+            setTimeout(() => {
+                document.getElementById('feedbackBox').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('modalActions').classList.add('show');
+                    setTimeout(showFinalScreen, 2000);
+                }, 300);
+            }, 300);
+        }
+
+        // Step 7: Show final screen
+        function showFinalScreen() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('screen2').classList.add('hidden');
+                document.getElementById('screen3').classList.remove('hidden');
+            }, 400);
+        }
+
+        // Start the animation sequence
+        setTimeout(typeGoal, 1000);
+    </script>
+</body>
+</html>
